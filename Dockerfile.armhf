@@ -1,0 +1,9 @@
+FROM lsiobase/alpine:arm32v7-3.10
+
+# copy local files
+COPY root/ /
+
+COPY AirConnect/bin/airupnp-arm-static /usr/local/bin/airupnp-arm
+
+# ports and volumes
+VOLUME /config
