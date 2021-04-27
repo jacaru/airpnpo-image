@@ -36,4 +36,4 @@ jobs:
           file: ./Dockerfile.armhf
           platforms: linux/arm/v7
           push: true
-          tags: ghcr.io/jacaru/airupnp-image:v{{ steps.version.outputs.version }}
+          tags: ghcr.io/jacaru/airupnp-image:v${{ steps.version.outputs.version }}
