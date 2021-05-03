@@ -1,0 +1,31 @@
+name: Tag from upstream
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'
+jobs:
+  tag_upstream_release:
+    name: Tag latest upstream release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout downstream
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PUSH_TAG_PAT }}
+      - name: Get latest local tag
+        id: local_release
+        uses: actions-ecosystem/action-get-latest-tag@v1
+      - name: Check out the AirConnect repo
+        uses: actions/checkout@v2
+        with:
+          repository: 'philippe44/AirConnect'
+          path: 'AirConnect'
+      - name: GetAirConnect version
+        id: airupnp_release
+        run: |
+          echo "::set-output name=version::$(cat AirConnect/CHANGELOG | head -1)"
+      - name: Tag release if new
+        uses: actions-ecosystem/action-push-tag@v1 
+        if: ${{ !contains(steps.local_release.outputs.tag, steps.airupnp_release.outputs.version) }}
+        with:
+          tag: v${{ steps.airupnp_release.outputs.release }}-mod000

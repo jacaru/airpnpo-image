@@ -1,5 +1,8 @@
 name: Publish Docker image
-on: workflow_dispatch
+on:
+  push:
+    tags:
+      - v*-mod*
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
@@ -10,15 +13,21 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+      - name: Docker meta
+        id: meta
+        uses: crazy-max/ghaction-docker-meta@v2
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ghcr.io/jacaru/airupnp-image
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=ref,event=tag
       - name: Check out the AirConnect repo
         uses: actions/checkout@v2
         with:
           repository: 'philippe44/AirConnect'
           path: 'AirConnect'
-      - name: GetAirConnect version
-        id: version
-        run: |
-          echo "::set-output name=version::$(cat AirConnect/CHANGELOG | head -1)"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -36,4 +45,5 @@ jobs:
           file: ./Dockerfile.armhf
           platforms: linux/arm/v7
           push: true
-          tags: ghcr.io/jacaru/airupnp-image:v${{ steps.version.outputs.version }},ghcr.io/jacaru/airupnp-image:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
