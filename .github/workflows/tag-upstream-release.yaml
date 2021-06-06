@@ -28,4 +28,4 @@ jobs:
         uses: actions-ecosystem/action-push-tag@v1 
         if: ${{ !contains(steps.local_release.outputs.tag, steps.airupnp_release.outputs.version) }}
         with:
-          tag: v${{ steps.airupnp_release.outputs.release }}-mod000
+          tag: v${{ steps.airupnp_release.outputs.version }}-mod000
