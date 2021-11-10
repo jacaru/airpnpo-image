@@ -1,4 +1,4 @@
-FROM lsiobase/alpine:arm32v7-3.10
+FROM lsiobase/ubuntu:bionic
 
 # copy local files
 COPY root/ /
