@@ -1,3 +1,3 @@
 #!/usr/bin/with-contenv bash
 
-exec s6-setuidgid abc /usr/local/bin/airupnp-arm -Z -x /config/airupnp.xml
+exec s6-setuidgid abc /usr/local/bin/airupnp -Z -x /config/airupnp.xml

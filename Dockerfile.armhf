@@ -3,9 +3,9 @@ FROM lsiobase/ubuntu:bionic
 # copy local files
 COPY root/ /
 
-COPY AirConnect/bin/airupnp-arm /usr/local/bin/airupnp-arm
+COPY AirConnect/bin/airupnp-linux-arm /usr/local/bin/airupnp
 
-RUN chmod a+x /usr/local/bin/airupnp-arm
+RUN chmod a+x /usr/local/bin/airupnp
 
 # ports and volumes
 VOLUME /config
