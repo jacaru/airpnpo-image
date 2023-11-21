@@ -1,17 +1,16 @@
-FROM lsiobase/ubuntu:bionic
+FROM lsiobase/ubuntu:jammy
 
 # copy local files
 COPY root/ /
 
 ARG VERSION
-RUN dir=$(mktemp -d) && \
-    cd $dir && \
-    curl -fsSLO https://github.com/philippe44/AirConnect/releases/download/${VERSION#v}/AirConnect-${VERSION#v}.zip && \
-    unzip AirConnect-${VERSION#v}.zip && \
-    cp airupnp-linux-arm /usr/local/bin/airupnp && \
-    chmod a+x /usr/local/bin/airupnp && \
-    cd - && \
-    rm -rf $dir
+RUN apt update && apt install -y unzip \
+    && dir=$(mktemp -d) && cd $dir \
+    && curl -fsSLO https://github.com/philippe44/AirConnect/releases/download/${VERSION#v}/AirConnect-${VERSION#v}.zip \
+    && unzip AirConnect-${VERSION#v}.zip \
+    && cp airupnp-linux-arm /usr/local/bin/airupnp && chmod a+x /usr/local/bin/airupnp \
+    && cd - && rm -rf $dir \
+    && apt purge --autoremove -y unzip && apt clean && rm -rf /var/lib/apt/lists/*
 
 # ports and volumes
 VOLUME /config
