@@ -3,9 +3,15 @@ FROM lsiobase/ubuntu:bionic
 # copy local files
 COPY root/ /
 
-COPY AirConnect/bin/airupnp-linux-arm /usr/local/bin/airupnp
-
-RUN chmod a+x /usr/local/bin/airupnp
+ARG VERSION
+RUN dir=$(mktemp -d) && \
+    cd $dir && \
+    curl -fsSLO https://github.com/philippe44/AirConnect/releases/download/${VERSION#v}/AirConnect-${VERSION#v}.zip && \
+    unzip AirConnect-${VERSION#v}.zip && \
+    cp airupnp-linux-arm /usr/local/bin/airupnp && \
+    chmod a+x /usr/local/bin/airupnp && \
+    cd - && \
+    rm -rf $dir
 
 # ports and volumes
 VOLUME /config
