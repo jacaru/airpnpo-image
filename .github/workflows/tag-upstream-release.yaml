@@ -23,9 +23,9 @@ jobs:
       - name: GetAirConnect version
         id: airupnp_release
         run: |
-          echo "::set-output name=version::$(cat AirConnect/CHANGELOG | head -1)"
+          echo "VERSION=$(cat AirConnect/CHANGELOG | head -1 | xargs)" >> "$GITHUB_OUTPUT"
       - name: Tag release if new
         uses: actions-ecosystem/action-push-tag@v1 
-        if: ${{ !contains(steps.local_release.outputs.tag, steps.airupnp_release.outputs.version) }}
+        if: ${{ !contains(steps.local_release.outputs.tag, steps.airupnp_release.outputs.VERSION) }}
         with:
-          tag: v${{ steps.airupnp_release.outputs.version }}-mod000
+          tag: v${{ steps.airupnp_release.outputs.VERSION }}-mod000
